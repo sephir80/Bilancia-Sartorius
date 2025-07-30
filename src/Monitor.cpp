@@ -57,5 +57,12 @@ void Monitor::SplashScreen()
   u8g2.drawStr(7, 30,"Analisi Delta Peso");
   u8g2.drawStr(0, 60,"ver 2.0.0");          
   u8g2.sendBuffer();
-  delay(2000);
+}
+
+void Monitor::ShowString(const String &str)
+{
+  u8g2.clearBuffer();
+  u8g2.setFont(u8g2_font_6x13_me);
+  u8g2.drawStr(0, 10, str.c_str());
+  u8g2.sendBuffer();
 }

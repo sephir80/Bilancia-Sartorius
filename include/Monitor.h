@@ -12,5 +12,6 @@ class Monitor
     void Begin();
     void ShowTest();
     void ShowData(scaleValue value);
+    void ShowString(const String &str);
     void SplashScreen();
 };
