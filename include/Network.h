@@ -23,5 +23,6 @@ class Network{
         String serverIP;
         unsigned int serverPort;
         String localIP;
+        WiFiUDP udp;
 };
 #endif

@@ -23,6 +23,7 @@ bool Network::Connect()
             delay(500);
         }
         localIP = WiFi.localIP().toString();
+        udp.begin(2390);
         return true;
     } else {
         return false;
@@ -43,7 +44,6 @@ bool Network::sendData(const char* data, unsigned int length)
         return false;
     }
 
-    WiFiUDP udp;
     udp.beginPacket(serverIP.c_str(), serverPort);
     udp.write((const uint8_t*)data, length);
     udp.endPacket();
