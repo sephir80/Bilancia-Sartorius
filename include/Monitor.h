@@ -13,6 +13,8 @@ class Monitor
     Monitor();
     void Begin();
     void ShowTest();
-    void ShowData(scaleValue value);
+    void ShowData(scaleValue value,bool connected);
+    void ShowText(const char* text, int row);
+    void Clear();
     void SplashScreen();
 };
