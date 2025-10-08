@@ -2,35 +2,27 @@
 #define DATAVALUE_H
 
 #include <Arduino.h>
+#include <vector>
 
 struct scaleValue {
   String Date;
   String Time;
-  String IDScale;
   int grams;
   int gramsPerMinute;
 };
 
-// struct DataShow
-// {
-//   String date;
-//   String time;
-//   String gMin;
-//   String weight;
-// };
 
 class DataValue {
 private:
-  scaleValue Valore;
-  int Pesi[10];
-  int indexPesi;
-  int CalcGramsPerMinute(int g);
-  void ArrayMove(int g);
+  std::vector<scaleValue> Valori;
+  std::string IDScale;
 public:
   DataValue();
   void putData(String* buffer);
-  scaleValue GetData();
-  String gramsPerMinute();
+  void putDataFake(int gr);
+  int grams();
+  void setGramsPerMinute(int grmin);
+  std::vector<scaleValue> GetData();
 };
 
 #endif
