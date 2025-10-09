@@ -14,7 +14,7 @@ struct scaleValue {
 
 class DataValue {
 private:
-  std::vector<scaleValue> Valori;
+  scaleValue Valori;
   std::string IDScale;
 public:
   DataValue();
@@ -22,7 +22,7 @@ public:
   void putDataFake(int gr);
   int grams();
   void setGramsPerMinute(int grmin);
-  std::vector<scaleValue> GetData();
+  scaleValue GetData();
 };
 
 #endif
