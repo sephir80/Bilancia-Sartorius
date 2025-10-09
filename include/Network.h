@@ -12,17 +12,20 @@
 
 class Network{
     public:
-        Network(String server_IP, unsigned int server_Port);
+        Network();
+        Network(IPAddress local_IP, IPAddress gateway_IP, IPAddress subnet_Mask, IPAddress primary_DNS);
         bool Connect();
-        String getLocalIP() const { return this->localIP; }
+        String getLocalIP();
         bool isConnected();
-        bool sendData(const char* data, unsigned int length);
+        bool sendData(const char* serverIP,unsigned int serverPort,const char* data, unsigned int length);
     private:
         const char* ssid     = SECRET_SSID;
         const char* password = SECRET_PASS;
-        String serverIP;
-        unsigned int serverPort;
-        String localIP;
+        IPAddress localIP;
+        IPAddress gateway;
+        IPAddress subnet;
+        IPAddress primaryDNS;
+        String localIPAssigned;
         WiFiUDP udp;
 };
 #endif
