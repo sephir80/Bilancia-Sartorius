@@ -5,6 +5,7 @@
 #include <WiFiS3.h>
 #include <WiFiUdp.h>
 #include <Arduino.h>
+#include "NTPClient.h"
 
 // WiFi parameters
 
@@ -15,6 +16,7 @@ class Network{
         Network();
         Network(IPAddress local_IP, IPAddress gateway_IP, IPAddress subnet_Mask, IPAddress primary_DNS);
         bool Connect();
+        unsigned long SyncTime();
         String getLocalIP();
         bool isConnected();
         bool sendData(const char* serverIP,unsigned int serverPort,const char* data, unsigned int length);
@@ -27,5 +29,6 @@ class Network{
         IPAddress primaryDNS;
         String localIPAssigned;
         WiFiUDP udp;
+        NTPClient *timeClient;  
 };
 #endif

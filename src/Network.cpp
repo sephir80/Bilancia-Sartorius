@@ -1,4 +1,5 @@
 #include "Network.h"
+#include <RTC.h>
 
 
 Network::Network( IPAddress local_IP, IPAddress gateway_IP, IPAddress subnet_Mask, IPAddress primary_DNS)
@@ -38,6 +39,15 @@ bool Network::Connect()
     } else {
         return false;
     }
+}
+
+unsigned long Network::SyncTime()
+{
+    timeClient=new NTPClient(udp, "ntp1.inrim.it", 3600, 60000);
+    timeClient->begin();
+    timeClient->update();
+    unsigned long epochTime = timeClient->getEpochTime();
+    return epochTime;
 }
 
 bool Network::isConnected() 

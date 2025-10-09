@@ -3,6 +3,10 @@
 #include "DataValue.h"
 #include "Algorithm.h"
 #include "Network.h"
+#include <RTC.h>
+#include "ntpClient.h"
+
+
 
 Monitor Display;
 int numero;
@@ -44,6 +48,13 @@ void setup() {
   }
   Serial.begin(9600);
   Serial.println("Setup completato");
+  Rete.SyncTime();
+  RTCTime syncTime=RTCTime(Rete.SyncTime());
+  RTC.setTime(syncTime);
+
+  Display.ShowText(syncTime.toString().c_str(),1);
+
+  delay(4000);
 }
 
 void loop() 
@@ -55,9 +66,10 @@ void loop()
     grammiFake-=1;
     //ValoreBilancia.putData(ScaleSerial.Receive());
     ValoreBilancia.putDataFake(grammiFake);
-    numero=Algoritmo.addDataPoint(ValoreBilancia.grams(),adesso)?Algoritmo.getGramsPerMinute():0;
+ //   numero=Algoritmo.addDataPoint(ValoreBilancia.grams(),adesso)?Algoritmo.getGramsPerMinute():0;
     ValoreBilancia.setGramsPerMinute(numero);
-    Display.ShowData(ValoreBilancia.GetData().back(),Rete.isConnected());
+  //  Display.ShowData(ValoreBilancia.GetData().back(),Rete.isConnected());
+  
     Rete.sendData("192.168.7.101",10500,"Ciao Mondo",10);
     Serial.println("Pacchetto Inviato");
   }

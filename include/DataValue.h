@@ -20,7 +20,6 @@ public:
   DataValue();
   void putData(String* buffer);
   void putDataFake(int gr);
-  int grams();
   void setGramsPerMinute(int grmin);
   scaleValue GetData();
 };
