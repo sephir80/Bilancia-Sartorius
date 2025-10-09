@@ -6,7 +6,7 @@
 
 struct scaleValue {
   String Date;
-  String Time;
+  unsigned int Time;
   int grams;
   int gramsPerMinute;
 };
@@ -14,14 +14,15 @@ struct scaleValue {
 
 class DataValue {
 private:
-  scaleValue Valori;
+  scaleValue Valore;
   std::string IDScale;
 public:
   DataValue();
   void putData(String* buffer);
-  void putDataFake(int gr);
+  void putDataFake(String date,unsigned int time,int gr);
   void setGramsPerMinute(int grmin);
   scaleValue GetData();
+  String GetDataToString();
 };
 
 #endif

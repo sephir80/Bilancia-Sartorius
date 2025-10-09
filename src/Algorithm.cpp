@@ -2,9 +2,9 @@
 
 Algorithm::Algorithm(int nElem) : nelements(nElem), gramsPerMinute(0) {}
 
-bool Algorithm::addDataPoint(int weight, unsigned long timestamp) {
+bool Algorithm::addDataPoint(scaleValue newData) {
     // Add new data point
-    dataPoints.push_back({weight, timestamp});
+    dataPoints.push_back({newData.grams, newData.Time});
 
     if (dataPoints.size() > nelements) {
         gramsPerMinute = calculateRate();

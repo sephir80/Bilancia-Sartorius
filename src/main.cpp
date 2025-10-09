@@ -65,12 +65,12 @@ void loop()
     tempoprecedente=adesso;
     grammiFake-=1;
     //ValoreBilancia.putData(ScaleSerial.Receive());
-    ValoreBilancia.putDataFake(grammiFake);
- //   numero=Algoritmo.addDataPoint(ValoreBilancia.grams(),adesso)?Algoritmo.getGramsPerMinute():0;
-    ValoreBilancia.setGramsPerMinute(numero);
+    ValoreBilancia.putDataFake(ora.toString(),adesso, grammiFake);
+   numero=Algoritmo.addDataPoint(ValoreBilancia.GetData())?Algoritmo.getGramsPerMinute():0;
+   ValoreBilancia.setGramsPerMinute(numero);
   //  Display.ShowData(ValoreBilancia.GetData().back(),Rete.isConnected());
-  
-    Rete.sendData("192.168.7.101",10500,"Ciao Mondo",10);
+  String data=ValoreBilancia.GetDataToString();
+    Rete.sendData("192.168.1.110",10500,data.c_str(),data.length());
     Serial.println("Pacchetto Inviato");
   }
 }

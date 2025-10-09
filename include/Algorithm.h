@@ -10,7 +10,7 @@ struct AnalisisData {
 class Algorithm {
 public:
     Algorithm(int nElem);
-    bool addDataPoint(int weight, unsigned long timestamp);
+    bool addDataPoint(scaleValue newData);
     int getGramsPerMinute() const { return gramsPerMinute; }    
 private:
     int nelements;
