@@ -43,7 +43,7 @@ bool Network::Connect()
 
 unsigned long Network::SyncTime()
 {
-    timeClient=new NTPClient(udp, "ntp1.inrim.it", 3600, 60000);
+    timeClient=new NTPClient(udp, "ntp1.inrim.it", 7200, 60000);
     timeClient->begin();
     timeClient->update();
     unsigned long epochTime = timeClient->getEpochTime();

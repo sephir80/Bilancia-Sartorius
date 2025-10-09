@@ -28,6 +28,7 @@ IPAddress primaryDNS(192,168,6,254);
 
 //Network Rete(localIP,gateway, subnet, primaryDNS);
 Network Rete;
+RTCTime ora;
 
 char c;
 void setup() {
@@ -48,11 +49,10 @@ void setup() {
   }
   Serial.begin(9600);
   Serial.println("Setup completato");
-  Rete.SyncTime();
-  RTCTime syncTime=RTCTime(Rete.SyncTime());
-  RTC.setTime(syncTime);
+  ora=RTCTime(Rete.SyncTime());
+  RTC.setTime(ora);
 
-  Display.ShowText(syncTime.toString().c_str(),1);
+  Display.ShowText(ora.toString().c_str(),1);
 
   delay(4000);
 }
