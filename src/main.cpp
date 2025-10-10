@@ -8,12 +8,13 @@
 
 
 
+
 Monitor Display;
 int numero;
-int grammiFake;
+double grammiFake;
 unsigned long tempoprecedente=0;
 const unsigned long intervallo=500;
- const int nElementi=30;
+ const int nElementi=10;
 String buffer="";
 String* stampa;
 ComData ScaleSerial;
@@ -29,7 +30,7 @@ IPAddress primaryDNS(192,168,6,254);
 //Network Rete(localIP,gateway, subnet, primaryDNS);
 Network Rete;
 RTCTime ora;
-
+int nvariazioni=0;
 char c;
 void setup() {
   // put your setup code here, to run once:
@@ -68,18 +69,28 @@ void setup() {
 
 void loop() 
 {
+
    unsigned long adesso=millis();
   if (adesso-tempoprecedente>=intervallo)
   {
     tempoprecedente=adesso;
-    //grammiFake-=1;
+    if ((nvariazioni>30)and (nvariazioni<=60))
+        grammiFake-=1;
+    else if ((nvariazioni>60)and (nvariazioni<=90))
+        grammiFake-=0;
+    else if (nvariazioni>90)
+        nvariazioni=0;
+    else
+        grammiFake-=0.5;
+    
     RTC.getTime(ora);
-    ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
-    // ValoreBilancia.putDataFake(ora.toString(),adesso, grammiFake);
+    //ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
+    ValoreBilancia.putDataFake(ora.toString(),adesso,abs(grammiFake));
     ValoreBilancia.setGramsPerMinute(Algoritmo.addDataPoint(ValoreBilancia.GetData()));
     Display.ShowData(ValoreBilancia.GetData(),Rete.isConnected());
     String data=ValoreBilancia.GetDataToString();
     Rete.sendData("192.168.7.101",10500,data.c_str(),data.length());
     Serial.println("Pacchetto Inviato");
+    nvariazioni++;
   }
 }
