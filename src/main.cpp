@@ -13,7 +13,7 @@ int numero;
 int grammiFake;
 unsigned long tempoprecedente=0;
 const unsigned long intervallo=500;
- const int nElementi=15;
+ const int nElementi=30;
 String buffer="";
 String* stampa;
 ComData ScaleSerial;
@@ -52,14 +52,13 @@ void setup() {
   RTC.getTime(ora);
   if (!RTC.isRunning()or (ora.getYear()<2025))
   {
+    RTC.begin();
     Display.ShowText("Sync Time NTP",0);
     ora=RTCTime(Rete.SyncTime());
     RTC.setTime(ora);
   }
-  else
-  {
-    Display.ShowText("RTC Time:",0);
-  }
+  RTC.getTime(ora);
+  Display.ShowText("RTC Time:",0);
 
   Display.ShowText(ora.toString().c_str(),1);
   delay(4000);
@@ -75,7 +74,7 @@ void loop()
     RTC.getTime(ora);
     //ValoreBilancia.putData(ScaleSerial.Receive());
     ValoreBilancia.putDataFake(ora.toString(),adesso, grammiFake);
-    numero=Algoritmo.addDataPoint(ValoreBilancia.GetData())?Algoritmo.getGramsPerMinute():0;
+    numero=Algoritmo.addDataPoint(ValoreBilancia.GetData());
     ValoreBilancia.setGramsPerMinute(numero);
     Display.ShowData(ValoreBilancia.GetData(),Rete.isConnected());
     String data=ValoreBilancia.GetDataToString();
