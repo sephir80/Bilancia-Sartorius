@@ -12,7 +12,7 @@ Monitor Display;
 int numero;
 int grammiFake;
 unsigned long tempoprecedente=0;
-const unsigned long intervallo=3000;
+const unsigned long intervallo=500;
  const int nElementi=15;
 String buffer="";
 String* stampa;
@@ -49,11 +49,19 @@ void setup() {
   }
   Serial.begin(9600);
   Serial.println("Setup completato");
-  ora=RTCTime(Rete.SyncTime());
-  RTC.setTime(ora);
+  RTC.getTime(ora);
+  if (!RTC.isRunning()or (ora.getYear()<2025))
+  {
+    Display.ShowText("Sync Time NTP",0);
+    ora=RTCTime(Rete.SyncTime());
+    RTC.setTime(ora);
+  }
+  else
+  {
+    Display.ShowText("RTC Time:",0);
+  }
 
   Display.ShowText(ora.toString().c_str(),1);
-
   delay(4000);
 }
 
@@ -64,13 +72,14 @@ void loop()
   {
     tempoprecedente=adesso;
     grammiFake-=1;
+    RTC.getTime(ora);
     //ValoreBilancia.putData(ScaleSerial.Receive());
     ValoreBilancia.putDataFake(ora.toString(),adesso, grammiFake);
-   numero=Algoritmo.addDataPoint(ValoreBilancia.GetData())?Algoritmo.getGramsPerMinute():0;
-   ValoreBilancia.setGramsPerMinute(numero);
-  //  Display.ShowData(ValoreBilancia.GetData().back(),Rete.isConnected());
-  String data=ValoreBilancia.GetDataToString();
-    Rete.sendData("192.168.1.110",10500,data.c_str(),data.length());
+    numero=Algoritmo.addDataPoint(ValoreBilancia.GetData())?Algoritmo.getGramsPerMinute():0;
+    ValoreBilancia.setGramsPerMinute(numero);
+    Display.ShowData(ValoreBilancia.GetData(),Rete.isConnected());
+    String data=ValoreBilancia.GetDataToString();
+    Rete.sendData("192.168.7.101",10500,data.c_str(),data.length());
     Serial.println("Pacchetto Inviato");
   }
 }
