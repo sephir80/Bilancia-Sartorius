@@ -18,11 +18,11 @@ private:
   std::string IDScale;
 public:
   DataValue();
-  void putData(String* buffer);
+  void putData(String data,unsigned int millis, String* buffer);
   void putDataFake(String date,unsigned int time,int gr);
   void setGramsPerMinute(int grmin);
   scaleValue GetData();
   String GetDataToString();
 };
 
-#endif
+#endif  

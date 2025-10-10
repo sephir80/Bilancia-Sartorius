@@ -9,11 +9,11 @@ DataValue::DataValue()
   IDScale="";
 }
 
-void DataValue::putData(String* buffer)
+void DataValue::putData(String data,unsigned int millis, String* buffer)
 {
 
-  Valore.Date=buffer[0].substring(0,10).c_str();
-  Valore.Time=atoi(buffer[0].substring(15).c_str());
+  Valore.Date=data;
+  Valore.Time=millis;
   if (IDScale=="")
     IDScale=buffer[2].substring(12).c_str();
   Valore.grams=atoi(buffer[3].substring(12,16).c_str());

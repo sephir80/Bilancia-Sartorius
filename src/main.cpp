@@ -62,6 +62,8 @@ void setup() {
 
   Display.ShowText(ora.toString().c_str(),1);
   delay(4000);
+  Display.ShowText("Attesa Bilancia",0);
+  Display.ShowText("",1);
 }
 
 void loop() 
@@ -70,12 +72,11 @@ void loop()
   if (adesso-tempoprecedente>=intervallo)
   {
     tempoprecedente=adesso;
-    grammiFake-=1;
+    //grammiFake-=1;
     RTC.getTime(ora);
-    //ValoreBilancia.putData(ScaleSerial.Receive());
-    ValoreBilancia.putDataFake(ora.toString(),adesso, grammiFake);
-    numero=Algoritmo.addDataPoint(ValoreBilancia.GetData());
-    ValoreBilancia.setGramsPerMinute(numero);
+    ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
+    // ValoreBilancia.putDataFake(ora.toString(),adesso, grammiFake);
+    ValoreBilancia.setGramsPerMinute(Algoritmo.addDataPoint(ValoreBilancia.GetData()));
     Display.ShowData(ValoreBilancia.GetData(),Rete.isConnected());
     String data=ValoreBilancia.GetDataToString();
     Rete.sendData("192.168.7.101",10500,data.c_str(),data.length());
