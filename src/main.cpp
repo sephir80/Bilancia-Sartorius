@@ -11,7 +11,6 @@
 
 Monitor Display;
 int numero;
-double grammiFake;
 unsigned long tempoprecedente=0;
 const unsigned long intervallo=1000;
  const int nElementi=60;
@@ -41,7 +40,7 @@ void setup() {
   Display.SplashScreen();
    ScaleSerial.Begin();
   delay(2000);
-  grammiFake=5000;
+  // grammiFake=5000; // Removed unused test variable
   Display.Clear();
   Display.ShowText("Connessione WiFi",0);
   delay(1000);
@@ -96,5 +95,16 @@ void loop()
     ValoreBilancia.GetDataToBuffer(msg,sizeof(msg));
     Rete.sendData("192.168.7.101",10500,msg,strlen(msg));
 nvariazioni++;
+    // Implement nvariazioni logic as suggested by the commented code
+    if ((nvariazioni > 30) && (nvariazioni <= 60))
+      grammiFake -= 1;
+    else if ((nvariazioni > 60) && (nvariazioni <= 90))
+      grammiFake -= 0;
+    else if (nvariazioni > 90)
+      nvariazioni = 0;
+    else
+      grammiFake -= 0.5;
+
+    nvariazioni++;
   }
 }

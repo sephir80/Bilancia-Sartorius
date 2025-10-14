@@ -68,7 +68,7 @@ bool Network::sendData(const char* serverIP, uint16_t serverPort, const char* da
         return false;  // fallito l'inizio del pacchetto
     }
 
-    size_t written = udp.write(reinterpret_cast<const uint8_t*>(data), length);
+    size_t written = udp.write(data, length);
     if (written != length) {
         // scrittura parziale o errore
         udp.stop();

@@ -29,7 +29,8 @@ int Algorithm::addDataPoint(scaleValue newData) {
     } */
    if (dataPoints.size() > nelements)
    {
-        if (dataPoints[nelements/2].totalWeight-dataPoints.back().totalWeight<=1)
+        if (dataPoints.size() > nelements / 2 &&
+            dataPoints[nelements/2].totalWeight - dataPoints.back().totalWeight <= 1)
         {
             dataPoints.clear(); // Remove all data points
             gramsPerMinute=0;
@@ -47,8 +48,8 @@ int Algorithm::addDataPoint(scaleValue newData) {
 }
 
 int Algorithm::calculateRate() {
-
-    volatile const auto& oldest = dataPoints.front(); 
+    const auto& oldest = dataPoints.front(); 
+    const auto& newest = dataPoints.back();
     volatile const auto& newest = dataPoints.back();
 
     int weightDiff = oldest.totalWeight - newest.totalWeight;
