@@ -13,8 +13,11 @@ Monitor Display;
 int numero;
 double grammiFake;
 unsigned long tempoprecedente=0;
-const unsigned long intervallo=500;
- const int nElementi=10;
+const unsigned long intervallo=1000;
+ const int nElementi=60;
+ char msg[128];
+
+ unsigned long adesso;
 String buffer="";
 String* stampa;
 ComData ScaleSerial;
@@ -70,11 +73,11 @@ void setup() {
 void loop() 
 {
 
-   unsigned long adesso=millis();
+  adesso=millis();
   if (adesso-tempoprecedente>=intervallo)
   {
     tempoprecedente=adesso;
-    if ((nvariazioni>30)and (nvariazioni<=60))
+/*      if ((nvariazioni>30)and (nvariazioni<=60))
         grammiFake-=1;
     else if ((nvariazioni>60)and (nvariazioni<=90))
         grammiFake-=0;
@@ -82,15 +85,16 @@ void loop()
         nvariazioni=0;
     else
         grammiFake-=0.5;
-    
+     */
     RTC.getTime(ora);
-    //ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
-    ValoreBilancia.putDataFake(ora.toString(),adesso,abs(grammiFake));
+    
+   ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
+   // ValoreBilancia.putDataFake(ora.toString(),adesso,abs(grammiFake));
     ValoreBilancia.setGramsPerMinute(Algoritmo.addDataPoint(ValoreBilancia.GetData()));
     Display.ShowData(ValoreBilancia.GetData(),Rete.isConnected());
-    String data=ValoreBilancia.GetDataToString();
-    Rete.sendData("192.168.7.101",10500,data.c_str(),data.length());
-    Serial.println("Pacchetto Inviato");
-    nvariazioni++;
+//     String data=ValoreBilancia.GetDataToString();
+    ValoreBilancia.GetDataToBuffer(msg,sizeof(msg));
+    Rete.sendData("192.168.7.101",10500,msg,strlen(msg));
+nvariazioni++;
   }
 }

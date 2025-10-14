@@ -58,16 +58,24 @@ bool Network::isConnected()
     return false;
 }
 
-bool Network::sendData(const char* serverIP,unsigned int serverPort,const char* data, unsigned int length)
+bool Network::sendData(const char* serverIP, uint16_t serverPort, const char* data, size_t length)
 {
-    if (!isConnected()) {
+    if (!isConnected() || data == nullptr || length == 0) {
         return false;
     }
 
-    udp.beginPacket(serverIP, serverPort);
-    udp.write((const uint8_t*)data, length);
-    udp.endPacket();
-    return true;
+    if (udp.beginPacket(serverIP, serverPort) != 1) {
+        return false;  // fallito l'inizio del pacchetto
+    }
+
+    size_t written = udp.write(reinterpret_cast<const uint8_t*>(data), length);
+    if (written != length) {
+        // scrittura parziale o errore
+        udp.stop();
+        return false;
+    }
+
+    return udp.endPacket() == 1;  // restituisce true solo se realmente inviato
 }
 
 String Network::getLocalIP()

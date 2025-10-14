@@ -22,7 +22,8 @@ public:
   void putDataFake(String date,unsigned int time,int gr);
   void setGramsPerMinute(int grmin);
   scaleValue GetData();
-  String GetDataToString();
+  //String GetDataToString();
+  void GetDataToBuffer(char* buffer, size_t len);
 };
 
 #endif  
