@@ -8,12 +8,15 @@
 
 
 
+
 Monitor Display;
 int numero;
-int grammiFake;
 unsigned long tempoprecedente=0;
-const unsigned long intervallo=500;
- const int nElementi=30;
+const unsigned long intervallo=1000;
+ const int nElementi=60;
+ char msg[128];
+
+ unsigned long adesso;
 String buffer="";
 String* stampa;
 ComData ScaleSerial;
@@ -29,7 +32,7 @@ IPAddress primaryDNS(192,168,6,254);
 //Network Rete(localIP,gateway, subnet, primaryDNS);
 Network Rete;
 RTCTime ora;
-
+int nvariazioni=0;
 char c;
 void setup() {
   // put your setup code here, to run once:
@@ -37,7 +40,7 @@ void setup() {
   Display.SplashScreen();
    ScaleSerial.Begin();
   delay(2000);
-  grammiFake=5000;
+  // grammiFake=5000; // Removed unused test variable
   Display.Clear();
   Display.ShowText("Connessione WiFi",0);
   delay(1000);
@@ -68,18 +71,40 @@ void setup() {
 
 void loop() 
 {
-   unsigned long adesso=millis();
+
+  adesso=millis();
   if (adesso-tempoprecedente>=intervallo)
   {
     tempoprecedente=adesso;
-    //grammiFake-=1;
+/*      if ((nvariazioni>30)and (nvariazioni<=60))
+        grammiFake-=1;
+    else if ((nvariazioni>60)and (nvariazioni<=90))
+        grammiFake-=0;
+    else if (nvariazioni>90)
+        nvariazioni=0;
+    else
+        grammiFake-=0.5;
+     */
     RTC.getTime(ora);
-    ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
-    // ValoreBilancia.putDataFake(ora.toString(),adesso, grammiFake);
+    
+   ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
+   // ValoreBilancia.putDataFake(ora.toString(),adesso,abs(grammiFake));
     ValoreBilancia.setGramsPerMinute(Algoritmo.addDataPoint(ValoreBilancia.GetData()));
     Display.ShowData(ValoreBilancia.GetData(),Rete.isConnected());
-    String data=ValoreBilancia.GetDataToString();
-    Rete.sendData("192.168.7.101",10500,data.c_str(),data.length());
-    Serial.println("Pacchetto Inviato");
+//     String data=ValoreBilancia.GetDataToString();
+    ValoreBilancia.GetDataToBuffer(msg,sizeof(msg));
+    Rete.sendData("192.168.7.101",10500,msg,strlen(msg));
+nvariazioni++;
+    // Implement nvariazioni logic as suggested by the commented code
+    if ((nvariazioni > 30) && (nvariazioni <= 60))
+      grammiFake -= 1;
+    else if ((nvariazioni > 60) && (nvariazioni <= 90))
+      grammiFake -= 0;
+    else if (nvariazioni > 90)
+      nvariazioni = 0;
+    else
+      grammiFake -= 0.5;
+
+    nvariazioni++;
   }
 }

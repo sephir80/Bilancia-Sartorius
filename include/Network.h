@@ -19,7 +19,7 @@ class Network{
         unsigned long SyncTime();
         String getLocalIP();
         bool isConnected();
-        bool sendData(const char* serverIP,unsigned int serverPort,const char* data, unsigned int length);
+        bool sendData(const char* serverIP, uint16_t serverPort, const char* data, size_t length);
     private:
         const char* ssid     = SECRET_SSID;
         const char* password = SECRET_PASS;

@@ -41,9 +41,10 @@ scaleValue DataValue::GetData()
   return Valore;
 }
 
-String DataValue::GetDataToString()
+/* String DataValue::GetDataToString()
 {
   String result="";
+  result.reserve(64);
   result.concat(IDScale.c_str());
   result.concat(";");
   result.concat(Valore.Date);
@@ -54,4 +55,9 @@ String DataValue::GetDataToString()
   result.concat(";");
   result.concat(Valore.gramsPerMinute);
   return result;
+} */
+
+void DataValue::GetDataToBuffer(char* buffer, size_t len)
+{
+  snprintf(buffer, len, "%s;%s;%u;%d;%d", IDScale.c_str(), Valore.Date.c_str(), Valore.Time, Valore.grams, Valore.gramsPerMinute);
 }
