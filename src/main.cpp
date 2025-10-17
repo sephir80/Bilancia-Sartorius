@@ -11,8 +11,8 @@ int grammiFake=5000;
 Monitor Display;
 int numero;
 unsigned long tempoprecedente=0;
-const unsigned long intervallo=1000;
-const int nElementi=60;
+const unsigned long intervallo=500;
+const int nElementi=30;
 char msg[128];
 
 unsigned long adesso;
@@ -73,7 +73,7 @@ void loop()
 {
 
   adesso=millis();
-  if (adesso-tempoprecedente>=intervallo)
+  if (adesso-tempoprecedente>=intervallo*2)
   {
     tempoprecedente=adesso;
     if ((nvariazioni>0)and (nvariazioni<=30))
@@ -82,18 +82,25 @@ void loop()
         grammiFake-=1;
     else if ((nvariazioni>150) and (nvariazioni<=270))
       grammiFake-=2;
-    else
+    else if ((nvariazioni>270) and (nvariazioni<=330))
       grammiFake-=0;
+    else if ((nvariazioni>330) and (nvariazioni<=390))
+      grammiFake-=1;
+      nvariazioni++;
+  }
+  if (adesso-tempoprecedente>=intervallo)
+  {
+
+    
 
     RTC.getTime(ora);
     
    //ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
-   ValoreBilancia.putDataFake(ora.toString(),adesso,abs(grammiFake));
+   ValoreBilancia.putDataFake(ora.toString(),adesso,abs(grammiFake+random(-1,+1)));
     ValoreBilancia.setGramsPerMinute(Algoritmo.addDataPoint(ValoreBilancia.GetData()));
     Display.ShowData(ValoreBilancia.GetData(),Rete.isConnected());
 //     String data=ValoreBilancia.GetDataToString();
     ValoreBilancia.GetDataToBuffer(msg,sizeof(msg));
-    Rete.sendData("192.168.7.101",10500,msg,strlen(msg));
-  nvariazioni++;  
+    Rete.sendData("192.168.1.110",10500,msg,strlen(msg));
   }
 }

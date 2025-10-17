@@ -9,16 +9,18 @@ Algorithm::Algorithm(int nElem,int thresholdVal)
 }
 
 int Algorithm::addDataPoint(scaleValue newData) {
-        // Add new data point
+    // Add new data point
     if (dataPoints.empty()) {
         dataPoints.push_back({newData.grams, newData.Time});
     }
     else if (calculateRateOk(newData)) {
         dataPoints.push_back({newData.grams, newData.Time});
     }
+    else {
+        return gramsPerMinute;
+    }
 
-    if (dataPoints.size() > nelements / 2 &&
-            dataPoints[nelements/2].totalWeight - dataPoints.back().totalWeight <= 1)
+    if (dataPoints.size() > 5 && dataPoints[dataPoints.size()-5].totalWeight - dataPoints.back().totalWeight <= 2)
         {
             dataPoints.clear(); // Remove all data points
             gramsPerMinute=0;
@@ -27,12 +29,9 @@ int Algorithm::addDataPoint(scaleValue newData) {
    if (dataPoints.size() >= nelements)
    {
 
-        else
-        {
          // Calculate grams per minute using Ordinary Least Squares
          gramsPerMinute = static_cast<int>(-ordinaryLeastSquares() * 60000);
          dataPoints.erase(dataPoints.begin()); // Remove the oldest data point
-        }
    }
 
     return gramsPerMinute;
