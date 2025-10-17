@@ -2,13 +2,12 @@
 #include "Monitor.h"
 
 
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
-Monitor::Monitor():lcd(rs, en, d4, d5, d6, d7){}
+Monitor::Monitor():lcd(0x27,16,2){}
 
 void Monitor::Begin()
 {
-//  u8g2.begin();
-  lcd.begin(16, 2);
+  lcd.init();
+  lcd.backlight();
 }
 
 void Monitor::ShowTest()

@@ -8,15 +8,14 @@
 
 
 
-
 Monitor Display;
 int numero;
 unsigned long tempoprecedente=0;
 const unsigned long intervallo=1000;
- const int nElementi=60;
- char msg[128];
+const int nElementi=60;
+char msg[128];
 
- unsigned long adesso;
+unsigned long adesso;
 String buffer="";
 String* stampa;
 ComData ScaleSerial;
@@ -34,6 +33,7 @@ Network Rete;
 RTCTime ora;
 int nvariazioni=0;
 char c;
+
 void setup() {
   // put your setup code here, to run once:
   Display.Begin();
@@ -94,17 +94,6 @@ void loop()
 //     String data=ValoreBilancia.GetDataToString();
     ValoreBilancia.GetDataToBuffer(msg,sizeof(msg));
     Rete.sendData("192.168.7.101",10500,msg,strlen(msg));
-nvariazioni++;
-    // Implement nvariazioni logic as suggested by the commented code
-    if ((nvariazioni > 30) && (nvariazioni <= 60))
-      grammiFake -= 1;
-    else if ((nvariazioni > 60) && (nvariazioni <= 90))
-      grammiFake -= 0;
-    else if (nvariazioni > 90)
-      nvariazioni = 0;
-    else
-      grammiFake -= 0.5;
 
-    nvariazioni++;
   }
 }
