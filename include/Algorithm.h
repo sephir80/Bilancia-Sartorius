@@ -17,7 +17,7 @@ private:
     int threshold;
     std::vector<AnalisisData> dataPoints;
     int calculateRate();
-    double ordinaryLeastSquares(int n, const std::vector<AnalisisData>& points);
+    double ordinaryLeastSquares();
     int calculateRateAdjustedAvg(int previousgramsPerMinute);
     bool calculateRateOk(const scaleValue& newest);
     int gramsPerMinute;

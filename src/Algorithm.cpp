@@ -9,28 +9,28 @@ Algorithm::Algorithm(int nElem,int thresholdVal)
 }
 
 int Algorithm::addDataPoint(scaleValue newData) {
-    int num;
-    // Add new data point
+        // Add new data point
     if (dataPoints.empty()) {
         dataPoints.push_back({newData.grams, newData.Time});
     }
     else if (calculateRateOk(newData)) {
         dataPoints.push_back({newData.grams, newData.Time});
     }
-    num =dataPoints.size();
 
-   if (dataPoints.size() > nelements)
-   {
-        if (dataPoints.size() > nelements / 2 &&
+    if (dataPoints.size() > nelements / 2 &&
             dataPoints[nelements/2].totalWeight - dataPoints.back().totalWeight <= 1)
         {
             dataPoints.clear(); // Remove all data points
             gramsPerMinute=0;
-        }
+        } 
+
+   if (dataPoints.size() >= nelements)
+   {
+
         else
         {
          // Calculate grams per minute using Ordinary Least Squares
-         gramsPerMinute = static_cast<int>(-ordinaryLeastSquares(num, dataPoints) * 60000);
+         gramsPerMinute = static_cast<int>(-ordinaryLeastSquares() * 60000);
          dataPoints.erase(dataPoints.begin()); // Remove the oldest data point
         }
    }
@@ -81,7 +81,8 @@ int Algorithm::calculateRateAdjustedAvg(int previousgramsPerMinute) {
     return (previousgramsPerMinute + currentRate) / 2;
 }
 
-double Algorithm::ordinaryLeastSquares(int n, const std::vector<AnalisisData>& points) {
+double Algorithm::ordinaryLeastSquares() {
+    int n = dataPoints.size();
     if (n < 2) return 0.0; // Not enough points to calculate a trend
 
     double sumX = 0.0;
@@ -89,7 +90,7 @@ double Algorithm::ordinaryLeastSquares(int n, const std::vector<AnalisisData>& p
     double sumXY = 0.0;
     double sumX2 = 0.0;
 
-    for (const auto& point : points) {
+    for (const auto& point : dataPoints) {
         double x = static_cast<double>(point.timestampedWeight);
         double y = static_cast<double>(point.totalWeight);
         sumX += x;

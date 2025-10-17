@@ -7,7 +7,7 @@
 #include "ntpClient.h"
 
 
-
+int grammiFake=5000;
 Monitor Display;
 int numero;
 unsigned long tempoprecedente=0;
@@ -76,24 +76,24 @@ void loop()
   if (adesso-tempoprecedente>=intervallo)
   {
     tempoprecedente=adesso;
-/*      if ((nvariazioni>30)and (nvariazioni<=60))
-        grammiFake-=1;
-    else if ((nvariazioni>60)and (nvariazioni<=90))
+    if ((nvariazioni>0)and (nvariazioni<=30))
         grammiFake-=0;
-    else if (nvariazioni>90)
-        nvariazioni=0;
+    else if ((nvariazioni>30)and (nvariazioni<=150))
+        grammiFake-=1;
+    else if ((nvariazioni>150) and (nvariazioni<=270))
+      grammiFake-=2;
     else
-        grammiFake-=0.5;
-     */
+      grammiFake-=0;
+
     RTC.getTime(ora);
     
-   ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
-   // ValoreBilancia.putDataFake(ora.toString(),adesso,abs(grammiFake));
+   //ValoreBilancia.putData(ora.toString(), adesso, ScaleSerial.Receive());
+   ValoreBilancia.putDataFake(ora.toString(),adesso,abs(grammiFake));
     ValoreBilancia.setGramsPerMinute(Algoritmo.addDataPoint(ValoreBilancia.GetData()));
     Display.ShowData(ValoreBilancia.GetData(),Rete.isConnected());
 //     String data=ValoreBilancia.GetDataToString();
     ValoreBilancia.GetDataToBuffer(msg,sizeof(msg));
     Rete.sendData("192.168.7.101",10500,msg,strlen(msg));
-
+  nvariazioni++;  
   }
 }
